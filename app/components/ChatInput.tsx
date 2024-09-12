@@ -1,4 +1,4 @@
-import { Box, Button, styled, TextField } from '@mui/material';
+import { Box, Button, styled, TextField, TextFieldProps } from '@mui/material';
 import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import { ClientToServerEvents, Message, ServerToClientEvents } from '../types/types';
@@ -7,6 +7,12 @@ type ChatInputProps = {
     socket: Socket<ServerToClientEvents, ClientToServerEvents> | null;
     setMessages: Dispatch<SetStateAction<Message[]>>;
 };
+
+const TextFieldStyled = styled(TextField)<TextFieldProps>({
+    '& .MuiInputBase-input': {
+        padding: '6px 10px',
+    },
+});
 
 export const ChatInput = ({ socket, setMessages }: ChatInputProps) => {
     const [inputValue, setInputValue] = useState('');
@@ -33,7 +39,7 @@ export const ChatInput = ({ socket, setMessages }: ChatInputProps) => {
 
     return (
         <Box component={'form'} id="messsageForm" display="flex" alignItems="center" gap={2} onSubmit={sendMessage}>
-            <TextField
+            <TextFieldStyled
                 id="outlined-helperText"
                 placeholder="Send a message"
                 autoComplete="off"
@@ -41,7 +47,7 @@ export const ChatInput = ({ socket, setMessages }: ChatInputProps) => {
                 value={inputValue}
                 onChange={handleInputChange}
             />
-            <Button type="submit" variant="text" size="large" color="primary">
+            <Button type="submit" variant="text" color="primary">
                 Send
             </Button>
         </Box>

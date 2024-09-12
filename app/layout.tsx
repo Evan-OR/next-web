@@ -3,6 +3,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import type { Metadata } from 'next';
 import DARK_THEME from './theme';
 import { Inter } from 'next/font/google';
+import { NavBar } from './components/NavBar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,6 +19,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <title>StreamSell</title>
+            </head>
             <body
                 className={inter.className}
                 style={{
@@ -29,6 +33,7 @@ export default function RootLayout({
                 <AppRouterCacheProvider>
                     <ThemeProvider theme={DARK_THEME}>
                         <CssBaseline />
+                        <NavBar />
                         {children}
                     </ThemeProvider>
                 </AppRouterCacheProvider>

@@ -1,9 +1,42 @@
-import React from 'react';
+'use client';
+
+import Hls from 'hls.js';
+import React, { useEffect, useRef } from 'react';
 
 export const VideoPlayer = () => {
+    const videoRef = useRef<null | HTMLVideoElement>(null);
+    const videoSrc = 'http://48.209.33.228:8080/hls/123.m3u8';
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (video) {
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.muted = true;
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoSrc;
+                video.addEventListener('loadedmetadata', () => {
+                    video.play();
+                });
+            }
+        }
+    }, [videoSrc]);
+
     return (
-        <div>
-            <video></video>
+        <div style={{ width: '100%' }}>
+            <video
+                style={{
+                    aspectRatio: '16 / 9',
+                    width: '100%',
+                }}
+                ref={videoRef}
+                controls
+            ></video>
         </div>
     );
 };

@@ -26,6 +26,10 @@ export const CountDown = ({ startTime, duration, msg, socket }: CountDownProps) 
     }, [timeRemaining, endTime]);
 
     useEffect(() => {
+        setHightestBidder(null);
+    }, [startTime]);
+
+    useEffect(() => {
         if (socket) {
             socket.on('biddingUpdate', (highestBidderMessage: HighestBidderMessage) => {
                 setHightestBidder(highestBidderMessage);

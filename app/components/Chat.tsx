@@ -11,6 +11,8 @@ import { CountDown } from './CountDown';
 const SOCKET_SERVER_URL = 'http://localhost:3001';
 
 const PaperStyled = styled(Paper)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
     width: 'fit-content',
     position: 'relative',
     padding: theme.spacing(2),
@@ -20,12 +22,12 @@ const PaperStyled = styled(Paper)(({ theme }) => ({
 const ScrollerStyled = styled(Box)({
     overflow: 'auto',
     display: 'flex',
+    flex: '1', // makes sure the chat section fills height
     flexDirection: 'column-reverse',
     overflowAnchor: 'auto',
     width: '100vw',
-    maxWidth: '500px',
-    height: '70vh',
-    maxHeight: '600px',
+    maxWidth: '350px',
+    height: '100%',
 });
 
 const ScrollerContentStyled = styled(Box)({
