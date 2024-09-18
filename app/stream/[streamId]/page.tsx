@@ -3,11 +3,13 @@ import { VideoPlayer } from '@/app/components/VideoPlayer';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
-// type StreamPageProps = {
-//     streamId: string;
-// };
+type StreamPageProps = {
+    params: {
+        streamId: string;
+    };
+};
 
-export default async function StreamPage({ params: { streamId } }: { params: { streamId: string } }) {
+export default function StreamPage({ params: { streamId } }: StreamPageProps) {
     return (
         <>
             <Typography variant="h5">StreamId: {streamId}</Typography>
