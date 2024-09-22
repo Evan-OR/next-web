@@ -3,9 +3,13 @@
 import Hls from 'hls.js';
 import React, { useEffect, useRef } from 'react';
 
-export const VideoPlayer = () => {
+type VideoPlayer = {
+    streamId: string;
+};
+
+export const VideoPlayer = ({ streamId }: VideoPlayer) => {
     const videoRef = useRef<null | HTMLVideoElement>(null);
-    const videoSrc = 'http://48.209.33.228:8080/hls/123.m3u8';
+    const videoSrc = `http://48.209.33.228:8080/hls/${streamId}.m3u8`;
 
     useEffect(() => {
         const video = videoRef.current;
