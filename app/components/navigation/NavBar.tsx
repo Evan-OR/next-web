@@ -1,8 +1,7 @@
 'use client';
 
-import { Box, Button, Divider, styled, Typography } from '@mui/material';
-import Link from 'next/link';
-import React from 'react';
+import { Box, Button, Divider, Link, styled, Typography } from '@mui/material';
+import NavAccountDisplay from './NavAccountDisplay';
 
 const NavButton = styled(Button)(({ theme }) => ({
     '&:hover': {
@@ -11,10 +10,10 @@ const NavButton = styled(Button)(({ theme }) => ({
     },
 }));
 
-const NavLink = styled(Link)(({ theme }) => ({
+const NavLink = styled(Link)({
     color: 'inherit',
     textDecoration: 'none',
-}));
+});
 
 export const NavBar = () => {
     return (
@@ -41,17 +40,7 @@ export const NavBar = () => {
 
                 <Divider orientation="vertical" flexItem />
 
-                <NavLink href={'/auth'}>
-                    <Button variant="text" color="primary">
-                        Login
-                    </Button>
-                </NavLink>
-
-                <NavLink href={'/auth'}>
-                    <Button variant="text" color="primary">
-                        Sign Up
-                    </Button>
-                </NavLink>
+                <NavAccountDisplay />
             </Box>
         </Box>
     );

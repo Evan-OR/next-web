@@ -9,6 +9,8 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@azure/msal": "^1.4.5",
+        "@azure/msal-react": "^2.1.0",
         "@emotion/cache": "^11.13.1",
         "@emotion/react": "^11.13.3",
         "@emotion/styled": "^11.13.0",
