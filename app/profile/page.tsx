@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { USER_COOKIE } from '@/app/auth/constants';
 import { UserData } from '@/app/types/types';
+import { TestAuthButton } from './TestAuthButton';
 
 const ProfilePage = () => {
     const cookiesList = cookies();
@@ -14,6 +15,8 @@ const ProfilePage = () => {
                     {key}: {value}
                 </div>
             ))}
+
+            <TestAuthButton />
         </div>
     ) : (
         <div>No User Data</div>
