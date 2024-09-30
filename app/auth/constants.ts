@@ -11,3 +11,9 @@ export const REGISTRATION_ERRORS = {
     },
     REQUIRED: 'Required',
 };
+
+export const USER_COOKIE = {
+    Auth: 'userAuth',
+    Data: 'userData',
+    ProfilePic: 'pp',
+};

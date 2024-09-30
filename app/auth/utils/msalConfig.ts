@@ -7,7 +7,7 @@ export const msalConfig: Configuration = {
         redirectUri: '/',
     },
     cache: {
-        cacheLocation: 'localStorage',
+        cacheLocation: 'sessionStorage', // Need to convert to session storage because cant use cookies :(
         storeAuthStateInCookie: true,
     },
 };
@@ -17,5 +17,6 @@ export const loginRequest = {
 };
 
 export const graphConfig = {
-    graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me',
+    meEndpoint: 'https://graph.microsoft.com/v1.0/me',
+    profilePicEndpoint: 'https://graph.microsoft.com/v1.0/me/photo/$value',
 };

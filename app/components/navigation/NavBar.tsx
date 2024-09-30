@@ -1,42 +1,27 @@
-'use client';
-
-import { Box, Button, Divider, Link, styled, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import NavAccountDisplay from './NavAccountDisplay';
-
-const NavButton = styled(Button)(({ theme }) => ({
-    '&:hover': {
-        color: theme.palette.primary.main,
-        backgroundColor: 'transparent',
-    },
-}));
-
-const NavLink = styled(Link)({
-    color: 'inherit',
-    textDecoration: 'none',
-});
+import NavLinkButton from './NavLinkButton';
 
 export const NavBar = () => {
     return (
-        <Box display={'flex'} justifyContent={'space-around'} alignItems={'center'} p={3} width={'100%'}>
+        <Box
+            display={'flex'}
+            justifyContent={'space-around'}
+            alignItems={'center'}
+            p={1}
+            width={'100%'}
+            minHeight={'68px'}
+        >
             <Box>
-                <NavLink href={'/'} style={{ color: 'inherit' }}>
+                <NavLinkButton href="/" isNavButton={false}>
                     <Typography variant="h5">
                         Stream<b>Sell</b>
                     </Typography>
-                </NavLink>
+                </NavLinkButton>
             </Box>
-            <Box display={'flex'} gap={3}>
-                <NavLink href={'/'}>
-                    <NavButton variant="text" color="inherit" disableRipple>
-                        Home
-                    </NavButton>
-                </NavLink>
-
-                <NavLink href={'/streams'}>
-                    <NavButton variant="text" color="inherit" disableRipple>
-                        Streams
-                    </NavButton>
-                </NavLink>
+            <Box display={'flex'} alignItems={'center'} gap={3}>
+                <NavLinkButton href="/" text="Home" isNavButton></NavLinkButton>
+                <NavLinkButton href="/streams" text="Streams" isNavButton></NavLinkButton>
 
                 <Divider orientation="vertical" flexItem />
 

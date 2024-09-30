@@ -1,39 +1,26 @@
-import { Avatar, Box, Button, Link, styled, Typography } from '@mui/material';
-import useActiveAccount from '../../hooks/useActiveAccount';
-import { useMsal } from '@azure/msal-react';
-import { useEffect } from 'react';
+import { Button } from '@mui/material';
+import NavLinkButton from './NavLinkButton';
+import { cookies } from 'next/headers';
+import { USER_COOKIE } from '@/app/auth/constants';
+import { UserData } from '@/app/types/types';
+import { NavLoggedInAccount } from './NavLoggedInAccount';
 
-const NavLink = styled(Link)({
-    color: 'inherit',
-    textDecoration: 'none',
-});
+const NavAccountDisplay = async () => {
+    const headersList = cookies();
+    const userDataCookie = headersList.get(USER_COOKIE.Data)?.value;
+    const userData: UserData = userDataCookie ? JSON.parse(userDataCookie) : undefined;
 
-const NavAccountDisplay = () => {
-    const { instance } = useMsal();
-    const user = useActiveAccount();
+    const username = userData ? userData.givenName : '';
 
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
-
-    return user ? (
-        <Box display={'flex'} alignItems={'center'} gap={1}>
-            <Avatar alt={user.name} />
-            <Typography variant="body1">{user.name}</Typography>
-            <Button onClick={() => instance.logoutPopup()}>Log out</Button>
-        </Box>
+    return username ? (
+        <NavLoggedInAccount username={username} />
     ) : (
         <>
-            <NavLink href={'/auth'}>
+            <NavLinkButton href="/auth" isNavButton={false}>
                 <Button variant="text" color="primary">
                     Login
                 </Button>
-            </NavLink>
-            <NavLink href={'/auth'}>
-                <Button variant="text" color="primary">
-                    Sign Up
-                </Button>
-            </NavLink>
+            </NavLinkButton>
         </>
     );
 };
