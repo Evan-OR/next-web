@@ -13,7 +13,12 @@ export const REGISTRATION_ERRORS = {
 };
 
 export const USER_COOKIE = {
-    Auth: 'userAuth',
+    RestAuth: 'userRestAuth',
+    GraphAuth: 'userGraphAuth',
     Data: 'userData',
     ProfilePic: 'pp',
+};
+
+export const USER_HEADERS = {
+    X_Data: 'x-user-data',
 };

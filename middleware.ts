@@ -6,7 +6,7 @@ export const middleware = async (req: NextRequest) => {
     const res = NextResponse.next();
 
     const cookieList = cookies();
-    const userAuth = cookieList.get(USER_COOKIE.Auth)?.value;
+    const userAuth = cookieList.get(USER_COOKIE.RestAuth)?.value;
 
     if (!userAuth) return NextResponse.redirect(new URL('/auth', req.url));
 

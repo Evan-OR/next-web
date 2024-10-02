@@ -21,7 +21,8 @@ export const handleLogin = async (instance: IPublicClientApplication, router: Ap
         const userData = await graphUserData(tokenRes.accessToken);
 
         // Setting user auth cookie
-        Cookies.set(USER_COOKIE.Auth, tokenRes.accessToken);
+        Cookies.set(USER_COOKIE.GraphAuth, tokenRes.accessToken);
+        Cookies.set(USER_COOKIE.RestAuth, res.account.idToken || '');
         Cookies.set(USER_COOKIE.Data, JSON.stringify(userData));
 
         router.push('/');
@@ -34,7 +35,8 @@ export const handleLogout = async (instance: IPublicClientApplication, router: A
     console.log('logout res: ', res);
     await instance.clearCache();
 
-    Cookies.remove(USER_COOKIE.Auth);
+    Cookies.remove(USER_COOKIE.GraphAuth);
+    Cookies.remove(USER_COOKIE.RestAuth);
     Cookies.remove(USER_COOKIE.Data);
 
     router.push('/');
@@ -42,7 +44,7 @@ export const handleLogout = async (instance: IPublicClientApplication, router: A
 };
 
 export const fetchUserImageUrl = async () => {
-    const authCookie = Cookies.get(USER_COOKIE.Auth);
+    const authCookie = Cookies.get(USER_COOKIE.GraphAuth);
     let imageUrl = '';
 
     if (authCookie) {
