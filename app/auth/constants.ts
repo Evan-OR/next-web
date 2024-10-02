@@ -11,3 +11,14 @@ export const REGISTRATION_ERRORS = {
     },
     REQUIRED: 'Required',
 };
+
+export const USER_COOKIE = {
+    RestAuth: 'userRestAuth',
+    GraphAuth: 'userGraphAuth',
+    Data: 'userData',
+    ProfilePic: 'pp',
+};
+
+export const USER_HEADERS = {
+    X_Data: 'x-user-data',
+};

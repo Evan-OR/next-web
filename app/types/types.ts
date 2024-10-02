@@ -27,3 +27,18 @@ export type ServerToClientEvents = {
 export type ClientToServerEvents = {
     message: (message: string) => void;
 };
+
+export type UserData = {
+    '@odata.context': string;
+    businessPhones: string[];
+    displayName: string;
+    givenName: string;
+    id: string;
+    jobTitle: string;
+    mail: string;
+    mobilePhone: string | null;
+    officeLocation: string | null;
+    preferredLanguage: string;
+    surname: string;
+    userPrincipalName: string;
+};
