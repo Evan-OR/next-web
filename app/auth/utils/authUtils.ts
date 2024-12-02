@@ -4,52 +4,59 @@ import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.
 import { loginRequest } from './msalConfig';
 import Cookies from 'js-cookie';
 import { graphUserData, graphProfilePic } from './graph';
+import storeUserData from '@/lib/requests/storeUserData';
 
 export const handleLogin = async (instance: IPublicClientApplication, router: AppRouterInstance) => {
-    const res = await instance.loginPopup({
-        scopes: ['openid', 'profile', 'User.Read'],
+  const res = await instance.loginPopup({
+    scopes: ['openid', 'profile', 'User.Read'],
+  });
+
+  if (res && res.account) {
+    instance.setActiveAccount(res.account);
+
+    const tokenRes = await instance.acquireTokenSilent({
+      ...loginRequest,
+      account: res.account,
     });
 
-    if (res && res.account) {
-        instance.setActiveAccount(res.account);
+    const userData = await graphUserData(tokenRes.accessToken);
 
-        const tokenRes = await instance.acquireTokenSilent({
-            ...loginRequest,
-            account: res.account,
-        });
+    // Setting user auth cookie
+    Cookies.set(USER_COOKIE.GraphAuth, tokenRes.accessToken);
+    Cookies.set(USER_COOKIE.RestAuth, res.account.idToken || '');
+    Cookies.set(USER_COOKIE.Data, JSON.stringify(userData));
 
-        const userData = await graphUserData(tokenRes.accessToken);
-
-        // Setting user auth cookie
-        Cookies.set(USER_COOKIE.GraphAuth, tokenRes.accessToken);
-        Cookies.set(USER_COOKIE.RestAuth, res.account.idToken || '');
-        Cookies.set(USER_COOKIE.Data, JSON.stringify(userData));
-
-        router.push('/');
-        router.refresh();
+    try {
+      await storeUserData();
+    } catch {
+      console.error('Failed to store user information!');
     }
-};
-
-export const handleLogout = async (instance: IPublicClientApplication, router: AppRouterInstance) => {
-    const res = await instance.logoutPopup();
-    console.log('logout res: ', res);
-    await instance.clearCache();
-
-    Cookies.remove(USER_COOKIE.GraphAuth);
-    Cookies.remove(USER_COOKIE.RestAuth);
-    Cookies.remove(USER_COOKIE.Data);
 
     router.push('/');
     router.refresh();
+  }
+};
+
+export const handleLogout = async (instance: IPublicClientApplication, router: AppRouterInstance) => {
+  const res = await instance.logoutPopup();
+  console.log('logout res: ', res);
+  await instance.clearCache();
+
+  Cookies.remove(USER_COOKIE.GraphAuth);
+  Cookies.remove(USER_COOKIE.RestAuth);
+  Cookies.remove(USER_COOKIE.Data);
+
+  router.push('/');
+  router.refresh();
 };
 
 export const fetchUserImageUrl = async () => {
-    const authCookie = Cookies.get(USER_COOKIE.GraphAuth);
-    let imageUrl = '';
+  const authCookie = Cookies.get(USER_COOKIE.GraphAuth);
+  let imageUrl = '';
 
-    if (authCookie) {
-        imageUrl = await graphProfilePic(authCookie);
-    }
+  if (authCookie) {
+    imageUrl = await graphProfilePic(authCookie);
+  }
 
-    return imageUrl;
+  return imageUrl;
 };
