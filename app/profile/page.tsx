@@ -1,22 +1,31 @@
 import { cookies } from 'next/headers';
 import { USER_COOKIE } from '@/auth/constants';
-import { UserData } from '@/types/types';
-import { TestAuthButton } from './TestAuthButton';
+import { User } from '@/types/types';
 
 const ProfilePage = () => {
   const cookiesList = cookies();
   const cookieValue = cookiesList.get(USER_COOKIE.Data)?.value;
-  const userData: UserData | null = cookieValue ? JSON.parse(cookieValue) : null;
+  const userData: User | null = cookieValue ? JSON.parse(cookieValue) : null;
+
+  const formatData = ({ givenName, surname, username, isSeller, wallet, mail, registration_date }: User) => {
+    return {
+      givenName,
+      surname,
+      username,
+      isSeller,
+      wallet,
+      email: mail,
+      registrationDate: registration_date,
+    };
+  };
 
   return userData ? (
     <div>
-      {Object.entries(userData).map(([key, value]) => (
+      {Object.entries(formatData(userData)).map(([key, value]) => (
         <div key={key}>
-          {key}: {value}
+          {key}: {JSON.stringify(value)}
         </div>
       ))}
-
-      <TestAuthButton />
     </div>
   ) : (
     <div>No User Data</div>

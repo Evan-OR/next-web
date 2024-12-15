@@ -2,13 +2,14 @@
 
 import React from 'react';
 import ProfilePicture from './ProfilePicture';
-import { Box, Button, Menu, MenuItem, styled } from '@mui/material';
+import { Box, Button, Menu, MenuItem, styled, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useMsal } from '@azure/msal-react';
 import { handleLogout } from '@/auth/utils/authUtils';
+import { User } from '@/types/types';
 
 type NavLoggedInAccountProps = {
-  username: string;
+  userData: User;
 };
 
 const NavButton = styled(Button)(({ theme }) => ({
@@ -18,7 +19,7 @@ const NavButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export const NavLoggedInAccount = ({ username }: NavLoggedInAccountProps) => {
+export const NavLoggedInAccount = ({ userData }: NavLoggedInAccountProps) => {
   const router = useRouter();
   const { instance } = useMsal();
 
@@ -46,9 +47,16 @@ export const NavLoggedInAccount = ({ username }: NavLoggedInAccountProps) => {
   return (
     <div>
       <NavButton onClick={handleClick} color="inherit">
-        <Box display={'flex'} alignItems={'center'} gap={1}>
+        <Box display={'flex'} alignItems={'center'} justifyContent={'flex-start'} gap={2}>
           <ProfilePicture />
-          {username}
+          <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
+            <Typography variant="body1" lineHeight={1.2}>
+              {userData.username}
+            </Typography>
+            <Typography variant="caption" lineHeight={1.2}>
+              €{userData.wallet}
+            </Typography>
+          </Box>
         </Box>
       </NavButton>
       <Menu id="profile-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>

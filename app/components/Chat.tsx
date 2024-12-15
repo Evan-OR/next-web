@@ -7,92 +7,105 @@ import { ClientToServerEvents, Message, ServerToClientEvents, TimerMessage } fro
 import ChatMessage from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { CountDown } from './CountDown';
+import Cookies from 'js-cookie';
+import { USER_COOKIE, USER_HEADERS } from '@/auth/constants';
 
 const SOCKET_SERVER_URL = 'http://localhost:3001';
 
 const PaperStyled = styled(Paper)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    width: 'fit-content',
-    position: 'relative',
-    padding: theme.spacing(2),
-    color: theme.palette.common.white,
+  display: 'flex',
+  flexDirection: 'column',
+  width: 'fit-content',
+  position: 'relative',
+  padding: theme.spacing(2),
+  color: theme.palette.common.white,
 }));
 
 const ScrollerStyled = styled(Box)({
-    overflow: 'auto',
-    display: 'flex',
-    flex: '1', // makes sure the chat section fills height
-    flexDirection: 'column-reverse',
-    overflowAnchor: 'auto',
-    width: '100vw',
-    maxWidth: '350px',
-    height: '100%',
+  overflow: 'auto',
+  display: 'flex',
+  flex: '1', // makes sure the chat section fills height
+  flexDirection: 'column-reverse',
+  overflowAnchor: 'auto',
+  width: '100vw',
+  maxWidth: '350px',
+  height: '100%',
 });
 
 const ScrollerContentStyled = styled(Box)({
-    display: 'flex',
-    flexDirection: 'column',
+  display: 'flex',
+  flexDirection: 'column',
 });
 
 export const Chat = () => {
-    const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
-    const [messages, setMessages] = useState<Message[]>([]);
+  const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
 
-    const [timerData, setTimerData] = useState<TimerMessage | null>(null);
+  const [timerData, setTimerData] = useState<TimerMessage | null>(null);
 
-    useEffect(() => {
-        const socketIo: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_SERVER_URL);
+  useEffect(() => {
+    // YIKES. REDO THIS!!!!
+    const authToken = Cookies.get(USER_COOKIE.RestAuth);
+    const userData = Cookies.get(USER_COOKIE.Data);
 
-        setSocket(socketIo);
+    const socketIo: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_SERVER_URL, {
+      ...(authToken && {
+        extraHeaders: {
+          'X-auth-token': authToken,
+          ...(userData && { [USER_HEADERS.X_Data]: userData }),
+        },
+      }),
+    });
 
-        return () => {
-            socketIo.disconnect();
-        };
-    }, []);
+    setSocket(socketIo);
 
-    useEffect(() => {
-        if (socket) {
-            socket.on('connect', () => {
-                console.log('connected');
-            });
+    return () => {
+      socketIo.disconnect();
+    };
+  }, []);
 
-            socket.on('message', (message: Message) => {
-                setMessages((prevMessages) => {
-                    const messages = [...prevMessages, message];
-                    console.log(messages);
-                    return messages;
-                });
-            });
+  useEffect(() => {
+    if (socket) {
+      socket.on('connect', () => {
+        console.log('connected');
+      });
 
-            socket.on('startTimer', (timerMessage: TimerMessage) => {
-                console.log(timerMessage);
-                setTimerData(timerMessage);
-            });
-        }
+      socket.on('message', (message: Message) => {
+        setMessages((prevMessages) => {
+          const messages = [...prevMessages, message];
+          console.log(messages);
+          return messages;
+        });
+      });
 
-        return () => {
-            if (socket) {
-                socket.off('message');
-            }
-        };
-    }, [socket]);
+      socket.on('startTimer', (timerMessage: TimerMessage) => {
+        console.log(timerMessage);
+        setTimerData(timerMessage);
+      });
+    }
 
-    return (
-        <PaperStyled>
-            {timerData && <CountDown {...timerData} socket={socket} />}
+    return () => {
+      if (socket) {
+        socket.off('message');
+      }
+    };
+  }, [socket]);
 
-            <ScrollerStyled>
-                <ScrollerContentStyled className="scroller-content">
-                    {messages.map((msg) => (
-                        <ChatMessage key={msg.timestamp} {...msg} />
-                    ))}
-                </ScrollerContentStyled>
-            </ScrollerStyled>
+  return (
+    <PaperStyled>
+      {timerData && <CountDown {...timerData} socket={socket} />}
 
-            <ChatInput socket={socket} setMessages={setMessages} />
-        </PaperStyled>
-    );
+      <ScrollerStyled>
+        <ScrollerContentStyled className="scroller-content">
+          {messages.map((msg) => (
+            <ChatMessage key={msg.timestamp} {...msg} />
+          ))}
+        </ScrollerContentStyled>
+      </ScrollerStyled>
+
+      <ChatInput socket={socket} setMessages={setMessages} />
+    </PaperStyled>
+  );
 };
 
 export default Chat;

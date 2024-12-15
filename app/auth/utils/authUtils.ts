@@ -19,15 +19,15 @@ export const handleLogin = async (instance: IPublicClientApplication, router: Ap
       account: res.account,
     });
 
-    const userData = await graphUserData(tokenRes.accessToken);
+    const MSUserData = await graphUserData(tokenRes.accessToken);
 
     // Setting user auth cookie
     Cookies.set(USER_COOKIE.GraphAuth, tokenRes.accessToken);
     Cookies.set(USER_COOKIE.RestAuth, res.account.idToken || '');
-    Cookies.set(USER_COOKIE.Data, JSON.stringify(userData));
 
     try {
-      await storeUserData();
+      const res = await storeUserData(MSUserData);
+      Cookies.set(USER_COOKIE.Data, JSON.stringify(res['userData']));
     } catch {
       console.error('Failed to store user information!');
     }
