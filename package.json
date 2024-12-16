@@ -17,6 +17,7 @@
         "@mui/icons-material": "^6.1.10",
         "@mui/material": "^6.0.0",
         "@mui/material-nextjs": "^6.0.2",
+        "dotenv": "^16.4.7",
         "hls.js": "^1.5.15",
         "js-cookie": "^3.0.5",
         "jsonwebtoken": "^9.0.2",

@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client';
 import Cookies from 'js-cookie';
 import { USER_COOKIE, USER_HEADERS } from '@/auth/constants';
 
-const SOCKET_SERVER_URL = 'http://localhost:3001';
+const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'http://localhost:3001';
 
 const useWebsocket = () => {
   const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
