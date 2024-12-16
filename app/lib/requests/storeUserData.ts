@@ -5,8 +5,8 @@ import Cookies from 'js-cookie';
 const storeUserData = async (userData: MSUserData) => {
   const authToken = Cookies.get(USER_COOKIE.RestAuth);
 
-  console.log(process.env.NEXT_PUBLIC_API_URL);
-  const req = await fetch('http://localhost:3002/user/', {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/user/';
+  const req = await fetch(API_URL, {
     method: 'Post',
     headers: {
       'Content-Type': 'application/json',
