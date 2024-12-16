@@ -28,6 +28,7 @@ export const handleLogin = async (instance: IPublicClientApplication, router: Ap
     try {
       const res = await storeUserData(MSUserData);
       Cookies.set(USER_COOKIE.Data, JSON.stringify(res['userData']));
+      console.log('STORED USER DATA AND SAVED COOKIE!');
     } catch {
       console.error('Failed to store user information!');
     }
