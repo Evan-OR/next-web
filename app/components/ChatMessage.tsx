@@ -2,11 +2,6 @@ import React from 'react';
 import { Typography, Box, styled } from '@mui/material';
 import { Message } from '../types/types';
 
-const TimeStyled = styled(Typography)({
-  minWidth: 'fit-content',
-  opacity: '0.8',
-});
-
 type UsernameStyledProps = { colour?: string };
 const UsernameStyled = styled(Typography)<UsernameStyledProps>(({ theme, colour }) => ({
   color: colour ? colour : theme.palette.common.white,
@@ -33,8 +28,7 @@ const replacementFunction = (match: string) => {
 const ChatMessage = ({ timestamp, username, msg, type, colour }: Message) => {
   const user = username ? username : 'You';
 
-  const time = timestamp ? new Date(timestamp).toLocaleTimeString() : new Date().toLocaleTimeString();
-  const formattedTime = time.substring(0, time.length - 3);
+  // const time = timestamp ? new Date(timestamp).toLocaleTimeString() : new Date().toLocaleTimeString();
 
   const formattedMsg = insertImageTags(msg);
 
