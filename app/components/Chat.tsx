@@ -15,16 +15,16 @@ const SOCKET_SERVER_URL = 'http://localhost:3001';
 const PaperStyled = styled(Paper)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  width: 'fit-content',
   position: 'relative',
   padding: theme.spacing(2),
   color: theme.palette.common.white,
+  marginBottom: theme.spacing(1),
 }));
 
 const ScrollerStyled = styled(Box)({
   overflow: 'auto',
   display: 'flex',
-  flex: '1', // makes sure the chat section fills height
+  flex: '1',
   flexDirection: 'column-reverse',
   overflowAnchor: 'auto',
   width: '100vw',
