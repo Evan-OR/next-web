@@ -49,7 +49,7 @@ const ProfilePage = async () => {
             />
 
             {Object.entries(formatData(userData)).map(([key, value]) => (
-              <PorfileInfoDisplay keyName={key} value={value} />
+              <PorfileInfoDisplay key={key} keyName={key} value={value} />
             ))}
           </Box>
         </Box>
@@ -62,7 +62,7 @@ const ProfilePage = async () => {
           </Box>
           <Box mt={2}>
             {previousCompletedBids.map((bid: any, i: number) => (
-              <Box>
+              <Box key={i}>
                 <CompletedBid bid={bid} />
                 {i < previousCompletedBids.length - 1 && <Divider sx={{ my: 2 }} />}
               </Box>
