@@ -18,9 +18,19 @@ export type HighestBidderMessage = {
   bid: number;
 };
 
+export type WinnerBidData = {
+  amount: number;
+  timestamp: number;
+  userData: {
+    username: string;
+    profilePic: string;
+  } | null;
+};
+
 export type ServerToClientEvents = {
   message: (message: Message) => void;
   startTimer: (message: TimerMessage) => void;
+  timerComplete: (data: { msg: string; finalBidData: WinnerBidData }) => void;
   biddingUpdate: (message: HighestBidderMessage) => void;
 };
 
@@ -36,6 +46,7 @@ export type User = {
   registration_date: number;
   isSeller: boolean;
   wallet: number;
+  profilePic: string;
 } & MSUserData;
 
 export type MSUserData = {

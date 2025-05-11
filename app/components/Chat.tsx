@@ -10,7 +10,7 @@ import { CountDown } from './CountDown';
 import Cookies from 'js-cookie';
 import { USER_COOKIE, USER_HEADERS } from '@/auth/constants';
 
-const SOCKET_SERVER_URL = 'http://localhost:3001';
+const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
 
 const PaperStyled = styled(Paper)(({ theme }) => ({
   display: 'flex',
@@ -37,16 +37,24 @@ const ScrollerContentStyled = styled(Box)({
   flexDirection: 'column',
 });
 
-export const Chat = () => {
+type ChatPropsType = {
+  streamId: string;
+};
+
+export const Chat = ({ streamId }: ChatPropsType) => {
   const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
 
   const [timerData, setTimerData] = useState<TimerMessage | null>(null);
+  const [timerFinished, setTimerFinished] = useState(false);
 
   useEffect(() => {
     // YIKES. REDO THIS!!!!
     const authToken = Cookies.get(USER_COOKIE.RestAuth);
     const userData = Cookies.get(USER_COOKIE.Data);
+
+    const socketUrlWithParam = SOCKET_SERVER_URL + `?streamId=${streamId}`;
+    console.log(socketUrlWithParam);
 
     const socketIo: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_SERVER_URL, {
       ...(authToken && {
@@ -80,7 +88,16 @@ export const Chat = () => {
 
       socket.on('startTimer', (timerMessage: TimerMessage) => {
         console.log(timerMessage);
+        setTimerFinished(false);
         setTimerData(timerMessage);
+      });
+
+      socket.on('timerComplete', (data) => {
+        console.log(data);
+        setTimerFinished(true);
+        // setTimeout(() => {
+        //   setTimerData(null);
+        // }, 5000);
       });
     }
 
@@ -93,7 +110,7 @@ export const Chat = () => {
 
   return (
     <PaperStyled>
-      {timerData && <CountDown {...timerData} socket={socket} />}
+      {timerData && <CountDown {...timerData} socket={socket} timerFinished={timerFinished} />}
 
       <ScrollerStyled>
         <ScrollerContentStyled className="scroller-content">
