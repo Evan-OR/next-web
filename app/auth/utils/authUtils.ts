@@ -50,12 +50,13 @@ export const handleLogout = async (instance: IPublicClientApplication, router: A
   router.refresh();
 };
 
-export const fetchUserImageUrl = async () => {
+export const fetchUserImageBlob = async () => {
   const authCookie = Cookies.get(USER_COOKIE.GraphAuth);
-  let imageUrl = '';
+  let imageUrl = null;
 
   if (authCookie) {
-    imageUrl = await graphProfilePic(authCookie);
+    const { blob } = await graphProfilePic(authCookie);
+    imageUrl = blob;
   }
 
   return imageUrl;

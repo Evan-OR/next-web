@@ -10,7 +10,6 @@ const useWebsocket = () => {
   const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
 
   useEffect(() => {
-    // YIKES. REDO THIS!!!!
     const authToken = Cookies.get(USER_COOKIE.RestAuth);
     const userData = Cookies.get(USER_COOKIE.Data);
 

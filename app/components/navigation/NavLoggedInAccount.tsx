@@ -1,12 +1,11 @@
 'use client';
-
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import ProfilePicture from './ProfilePicture';
 import { Box, Button, Menu, MenuItem, styled, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { User } from '@/types/types';
 import { useMsal } from '@azure/msal-react';
 import { handleLogout } from '@/auth/utils/authUtils';
-import { User } from '@/types/types';
 
 type NavLoggedInAccountProps = {
   userData: User;
@@ -29,7 +28,6 @@ export const NavLoggedInAccount = ({ userData }: NavLoggedInAccountProps) => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -46,9 +44,9 @@ export const NavLoggedInAccount = ({ userData }: NavLoggedInAccountProps) => {
 
   return (
     <div>
-      <NavButton onClick={handleClick} color="inherit">
+      <NavButton color="inherit" onClick={(e) => handleClick(e)}>
         <Box display={'flex'} alignItems={'center'} justifyContent={'flex-start'} gap={2}>
-          <ProfilePicture />
+          <ProfilePicture email={userData.mail} />
           <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
             <Typography variant="body1" lineHeight={1.2}>
               {userData.username}

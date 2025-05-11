@@ -1,22 +1,9 @@
-'use client';
-
-import { fetchUserImageUrl } from '../../auth/utils/authUtils';
-import { useEffect, useState } from 'react';
 import { Avatar } from '@mui/material';
 
-const ProfilePicture = () => {
-    const [imgUrl, setImgUrl] = useState('');
+const ProfilePicture = ({ email }: any) => {
+  const iamgeUrl = `https://livebiddingprojectimages.blob.core.windows.net/images/${email}`;
 
-    const setProfilePic = async () => {
-        const img = await fetchUserImageUrl();
-        setImgUrl(img)
-    }
-
-    useEffect(() => {
-        setProfilePic();
-    }, []);
-
-    return imgUrl ? <Avatar src={imgUrl} /> : <Avatar alt={'balls'} />;
+  return iamgeUrl ? <Avatar src={iamgeUrl} /> : <Avatar alt={''} />;
 };
 
 export default ProfilePicture;

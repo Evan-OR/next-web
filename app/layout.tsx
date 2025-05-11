@@ -9,38 +9,39 @@ import { AuthProvider } from './auth/utils/AuthProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'StreamSell',
-    description: 'Stream auction app',
+  title: 'StreamSell',
+  description: 'Stream auction app',
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en">
-            <head>
-                <title>StreamSell</title>
-            </head>
-            <body
-                className={inter.className}
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <AppRouterCacheProvider>
-                    <ThemeProvider theme={DARK_THEME}>
-                        <CssBaseline />
-                        <AuthProvider>
-                            <NavBar />
-                            {children}
-                        </AuthProvider>
-                    </ThemeProvider>
-                </AppRouterCacheProvider>
-            </body>
-        </html>
-    );
+  return (
+    <html lang="en">
+      <head>
+        <title>StreamSell</title>
+      </head>
+      <body
+        className={inter.className}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={DARK_THEME}>
+            <CssBaseline />
+            <AuthProvider>
+              <NavBar />
+              {children}
+            </AuthProvider>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
+      </body>
+    </html>
+  );
 }

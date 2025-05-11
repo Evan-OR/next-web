@@ -39,6 +39,7 @@ export const VideoPlayer = ({ streamId }: VideoPlayer) => {
         style={{
           aspectRatio: '16 / 9',
           width: '100%',
+          borderRadius: '4px',
         }}
         ref={videoRef}
         controls
