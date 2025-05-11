@@ -28,9 +28,6 @@ const replacementFunction = (match: string) => {
 const ChatMessage = ({ timestamp, username, msg, type, colour }: Message) => {
   const user = username ? username : 'You';
 
-  const time = timestamp ? new Date(timestamp).toLocaleTimeString() : new Date().toLocaleTimeString();
-  const formattedTime = time.substring(0, time.length - 3);
-
   const formattedMsg = insertImageTags(msg);
 
   return type !== 'host' ? (
