@@ -3,10 +3,10 @@ import { fetchUserImageBlob } from '@/auth/utils/authUtils';
 import { MSUserData } from '@/types/types';
 import Cookies from 'js-cookie';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
-
 const storeUserData = async (userData: MSUserData) => {
   const authToken = Cookies.get(USER_COOKIE.RestAuth);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
   const req = await fetch(`${API_URL}user/`, {
     method: 'Post',
