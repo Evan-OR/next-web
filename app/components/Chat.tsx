@@ -10,7 +10,7 @@ import { CountDown } from './CountDown';
 import Cookies from 'js-cookie';
 import { USER_COOKIE, USER_HEADERS } from '@/auth/constants';
 
-const SOCKET_SERVER_URL = 'http://localhost:3001';
+const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
 
 const PaperStyled = styled(Paper)(({ theme }) => ({
   display: 'flex',
