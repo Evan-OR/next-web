@@ -10,8 +10,6 @@ import { CountDown } from './CountDown';
 import Cookies from 'js-cookie';
 import { USER_COOKIE, USER_HEADERS } from '@/auth/constants';
 
-const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
-
 const PaperStyled = styled(Paper)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -47,6 +45,9 @@ export const Chat = ({ streamId }: ChatPropsType) => {
 
   const [timerData, setTimerData] = useState<TimerMessage | null>(null);
   const [timerFinished, setTimerFinished] = useState(false);
+
+  const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_SOCKET_URL!;
+  console.log('WEBSOCKE_ULR : ', SOCKET_SERVER_URL);
 
   useEffect(() => {
     // YIKES. REDO THIS!!!!
