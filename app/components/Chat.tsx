@@ -96,9 +96,9 @@ export const Chat = ({ streamId }: ChatPropsType) => {
       socket.on('timerComplete', (data) => {
         console.log(data);
         setTimerFinished(true);
-        // setTimeout(() => {
-        //   setTimerData(null);
-        // }, 5000);
+        setTimeout(() => {
+          setTimerData(null);
+        }, 5000);
       });
     }
 
