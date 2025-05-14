@@ -9,7 +9,7 @@ type VideoPlayer = {
 
 export const VideoPlayer = ({ streamId }: VideoPlayer) => {
   const videoRef = useRef<null | HTMLVideoElement>(null);
-  const videoSrc = `http://48.209.33.228:8080/hls/${streamId}.m3u8`;
+  const videoSrc = `https://48.209.33.228:8080/hls/${streamId}.m3u8`;
 
   useEffect(() => {
     const video = videoRef.current;
