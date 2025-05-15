@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  Divider,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -16,7 +17,8 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import CompletedBid from '@/components/CompletedBid';
 
 interface StyledAlertProps {
   status: 'connected' | 'connecting' | 'failed';
@@ -43,11 +45,15 @@ const AdminPage = () => {
 
   const { socket } = useWebsocket();
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+
   const [formData, setFormData] = useState({
     itemName: 'Test',
     bidDuration: 15,
     startingBid: 1,
   });
+
+  const [data, setData] = useState<any>();
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, type: keyof typeof formData) => {
     setFormData((prev) => ({ ...prev, [type]: e.target.value }));
@@ -62,6 +68,22 @@ const AdminPage = () => {
     console.log('timer started!');
   };
 
+  const getData = async () => {
+    const requestURL = `${API_URL}bids/${'6755cdaff777a850f8ea023b'}`;
+    const res = await fetch(requestURL);
+
+    const data = (await res.json()) as { date: number }[];
+
+    const currentTime = new Date().getTime();
+
+    // console.log(data.filter((d) => !(currentTime - d.date > 500000)));
+    setData(data.filter((d) => !(currentTime - d.date > 500000)));
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <Box>
       <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
@@ -71,50 +93,63 @@ const AdminPage = () => {
         </Typography>
       </Box>
 
-      <Box mt={4} display={'flex'} flexDirection={'column'} gap={2} width={'300px'}>
-        {socket ? (
-          <StyledAlert icon={<CheckIcon fontSize="inherit" />} status="connected">
-            Connected to websocket server!
-          </StyledAlert>
-        ) : (
-          <StyledAlert icon={<CircularProgress size="20px" />} status="connecting">
-            Connecting to websocket server...
-          </StyledAlert>
-        )}
+      <Box display={'flex'} flexDirection={'column'}>
+        <Box mt={4} display={'flex'} flexDirection={'column'} gap={2} width={'300px'}>
+          {socket ? (
+            <StyledAlert icon={<CheckIcon fontSize="inherit" />} status="connected">
+              Connected to websocket server!
+            </StyledAlert>
+          ) : (
+            <StyledAlert icon={<CircularProgress size="20px" />} status="connecting">
+              Connecting to websocket server...
+            </StyledAlert>
+          )}
 
-        <TextField
-          slotProps={{ inputLabel: { shrink: true } }}
-          label="Bid Title"
-          size="small"
-          value={formData.itemName}
-          onChange={(e) => handleInput(e, 'itemName')}
-        />
-
-        <FormControl size="small">
-          <InputLabel htmlFor="outlined-adornment-amount">Bid duration in seconds</InputLabel>
-          <OutlinedInput
-            onChange={(e) => handleInput(e, 'bidDuration')}
-            value={formData.bidDuration}
-            label="Bid duration in seconds"
-            type="number"
+          <TextField
+            slotProps={{ inputLabel: { shrink: true } }}
+            label="Bid Title"
+            size="small"
+            value={formData.itemName}
+            onChange={(e) => handleInput(e, 'itemName')}
           />
-        </FormControl>
 
-        <FormControl size="small">
-          <InputLabel>Starting Bid</InputLabel>
-          <OutlinedInput
-            onChange={(e) => handleInput(e, 'startingBid')}
-            value={formData.startingBid}
-            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            label="Starting Bid"
-            type="number"
-          />
-        </FormControl>
+          <FormControl size="small">
+            <InputLabel htmlFor="outlined-adornment-amount">Bid duration in seconds</InputLabel>
+            <OutlinedInput
+              onChange={(e) => handleInput(e, 'bidDuration')}
+              value={formData.bidDuration}
+              label="Bid duration in seconds"
+              type="number"
+            />
+          </FormControl>
 
-        <Button onClick={startBid} disabled={!socket}>
-          Start Bid
-        </Button>
+          <FormControl size="small">
+            <InputLabel>Starting Bid</InputLabel>
+            <OutlinedInput
+              onChange={(e) => handleInput(e, 'startingBid')}
+              value={formData.startingBid}
+              startAdornment={<InputAdornment position="start">$</InputAdornment>}
+              label="Starting Bid"
+              type="number"
+            />
+          </FormControl>
+
+          <Button onClick={startBid} disabled={!socket}>
+            Start Bid
+          </Button>
+        </Box>
       </Box>
+
+      {data && (
+        <Box mt={2}>
+          {data.map((bid: any, i: number) => (
+            <Box key={i}>
+              <CompletedBid bid={bid} />
+              {i < data.length - 1 && <Divider sx={{ my: 2 }} />}
+            </Box>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 };
